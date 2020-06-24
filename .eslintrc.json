@@ -19,8 +19,9 @@
     "@typescript-eslint"
   ],
   "rules": {
+    "camelcase": "off",
+    "@typescript-eslint/camelcase": "off",
     "class-methods-use-this": "off",
-    "@typescript-eslint/camelcase":"off",
     "prettier/prettier": "error",
     "import/extensions": [
       "error",
