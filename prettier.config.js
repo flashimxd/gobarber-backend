@@ -3,3 +3,4 @@ module.exports = {
   trailingComa: 'all',
   arrowParens: 'avoid',
 };
+
