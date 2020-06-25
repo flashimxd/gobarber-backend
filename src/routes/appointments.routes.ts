@@ -8,6 +8,7 @@ import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 const appointmentsRoutes = Router();
 appointmentsRoutes.use(ensureAuthenticated);
 appointmentsRoutes.get('/', async (request, response) => {
+  console.log(request);
   const appointmentsRepository = getCustomRepository(AppointmentsRepository);
   const appointments = await appointmentsRepository.find();
 
