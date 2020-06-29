@@ -3,6 +3,7 @@ import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import User from '../models/Users';
 import AuthConfig from '../config/auth';
+import AppError from '../errors/appErrors';
 
 interface Request {
   email: string;
@@ -19,11 +20,11 @@ class AuthenticateUserService {
     const userRepository = getRepository(User);
     const user = await userRepository.findOne({ where: { email } });
 
-    if (!user) throw new Error('Bad Credentials');
+    if (!user) throw new AppError('Bad Credentials', 401);
 
     const passwordMatched = await compare(password, user.password);
 
-    if (!passwordMatched) throw new Error('Bad Credentials');
+    if (!passwordMatched) throw new AppError('Bad Credentials', 401);
 
     const { secret, expiresIn } = AuthConfig.jwt;
     const token = sign({}, secret, {

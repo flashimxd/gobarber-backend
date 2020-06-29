@@ -8,7 +8,6 @@ import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 const appointmentsRoutes = Router();
 appointmentsRoutes.use(ensureAuthenticated);
 appointmentsRoutes.get('/', async (request, response) => {
-  console.log(request);
   const appointmentsRepository = getCustomRepository(AppointmentsRepository);
   const appointments = await appointmentsRepository.find();
 
@@ -16,20 +15,16 @@ appointmentsRoutes.get('/', async (request, response) => {
 });
 
 appointmentsRoutes.post('/', async (request, response) => {
-  try {
-    const { provider_id, date } = request.body;
-    const parsedDate = parseISO(date);
-    const appointmentDate = startOfHour(parsedDate);
-    const createAppointment = new CreateAppointmentService();
-    const appointment = await createAppointment.execute({
-      provider_id,
-      date: appointmentDate,
-    });
+  const { provider_id, date } = request.body;
+  const parsedDate = parseISO(date);
+  const appointmentDate = startOfHour(parsedDate);
+  const createAppointment = new CreateAppointmentService();
+  const appointment = await createAppointment.execute({
+    provider_id,
+    date: appointmentDate,
+  });
 
-    return response.json(appointment);
-  } catch (error) {
-    return response.status(400).json({ error: error.message });
-  }
+  return response.json(appointment);
 });
 
 export default appointmentsRoutes;
