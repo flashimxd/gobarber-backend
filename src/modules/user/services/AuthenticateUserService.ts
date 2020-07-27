@@ -1,24 +1,29 @@
-import { getRepository } from 'typeorm';
 import { compare } from 'bcryptjs';
+import { inject, injectable } from 'tsyringe';
 import { sign } from 'jsonwebtoken';
 import User from '@modules/user/infra/typeorm/entities/Users';
 import AuthConfig from '@config/auth';
 import AppError from '@shared/errors/appErrors';
+import IUserRepository from '../repositories/IUserRepository';
 
-interface Request {
+interface IRequest {
   email: string;
   password: string;
 }
 
-interface Response {
+interface IResponse {
   user: User;
   token: string;
 }
-
+@injectable()
 class AuthenticateUserService {
-  public async execute({ email, password }: Request): Promise<Response> {
-    const userRepository = getRepository(User);
-    const user = await userRepository.findOne({ where: { email } });
+  constructor(
+    @inject('UserRepository')
+    private userRepository: IUserRepository
+  ) {}
+
+  public async execute({ email, password }: IRequest): Promise<IResponse> {
+    const user = await this.userRepository.findByEmail(email);
 
     if (!user) throw new AppError('Bad Credentials', 401);
 
@@ -27,6 +32,7 @@ class AuthenticateUserService {
     if (!passwordMatched) throw new AppError('Bad Credentials', 401);
 
     const { secret, expiresIn } = AuthConfig.jwt;
+
     const token = sign({}, secret, {
       subject: user.id,
       expiresIn,

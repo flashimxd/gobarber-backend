@@ -1,19 +1,25 @@
-import { getRepository } from 'typeorm';
 import fs from 'fs';
+import { inject, injectable } from 'tsyringe';
 import path from 'path';
 import UploadConfig from '@config/upload';
 import User from '@modules/user/infra/typeorm/entities/Users';
 import AppError from '@shared/errors/appErrors';
+import IUserRepository from '../repositories/IUserRepository';
 
 interface Request {
   user_id: string;
   fileName: string;
 }
 
+@injectable()
 class UpdateUserAvatarService {
+  constructor(
+    @inject('UserRepository')
+    private userRepository: IUserRepository
+  ) {}
+
   public async execute({ user_id, fileName }: Request): Promise<User> {
-    const userRepository = getRepository(User);
-    const user = await userRepository.findOne(user_id);
+    const user = await this.userRepository.findById(user_id);
 
     if (!user) throw new AppError('Invalid user', 401);
 
@@ -28,7 +34,7 @@ class UpdateUserAvatarService {
 
     user.avatar = fileName;
 
-    await userRepository.save(user);
+    await this.userRepository.save(user);
 
     return user;
   }
