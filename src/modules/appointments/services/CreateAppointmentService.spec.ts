@@ -1,5 +1,5 @@
-import CreateAppointmentServer from './CreateAppointmentService';
 import FakeAppointmentRepository from '../repositories/fakes/FakeAppointmentsRepository';
+import CreateAppointmentServer from './CreateAppointmentService';
 
 describe('Create Appointment', () => {
   it('should create a new appointment', async () => {
