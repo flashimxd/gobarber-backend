@@ -14,7 +14,8 @@
     "pg": "^8.2.1",
     "reflect-metadata": "^0.1.13",
     "tsyringe": "^4.3.0",
-    "typeorm": "^0.2.25"
+    "typeorm": "^0.2.25",
+    "uuidv4": "^6.2.0"
   },
   "scripts": {
     "build": "tsc",
@@ -43,7 +44,6 @@
     "ts-jest": "^26.1.4",
     "ts-node-dev": "^1.0.0-pre.44",
     "tsconfig-paths": "^3.9.0",
-    "typescript": "^3.8.3",
-    "uuidv4": "^6.1.0"
+    "typescript": "^3.8.3"
   }
 }
