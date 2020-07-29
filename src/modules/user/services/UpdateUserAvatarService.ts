@@ -25,10 +25,12 @@ class UpdateUserAvatarService {
   public async execute({ user_id, fileName }: Request): Promise<User> {
     const user = await this.userRepository.findById(user_id);
 
-    if (!user) throw new AppError('Invalid user', 401);
+    if (!user) {
+      throw new AppError('Invalid user', 401);
+    }
 
     if (user.avatar) {
-      await this.storageProvider.deleteFile(fileName);
+      await this.storageProvider.deleteFile(user.avatar);
     }
 
     const file = await this.storageProvider.saveFile(fileName);
