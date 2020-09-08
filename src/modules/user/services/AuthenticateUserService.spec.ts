@@ -2,21 +2,27 @@ import AppErrors from '@shared/errors/appErrors';
 import FakeUserRepository from '../repositories/fakes/FakeUserRepository';
 import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 import CreateUserServer from './CreateUserService';
-import AuthenticateUserServer from './AuthenticateUserService';
+import AuthenticateUserService from './AuthenticateUserService';
+
+let fakeUserRepository: FakeUserRepository;
+let fakeHashProvider: FakeHashProvider;
+let createUserServer: CreateUserServer;
+let authenticateUserServer: AuthenticateUserService;
 
 describe('Authenticate User', () => {
+  beforeEach(() => {
+    fakeUserRepository = new FakeUserRepository();
+    fakeHashProvider = new FakeHashProvider();
+    createUserServer = new CreateUserServer(
+      fakeUserRepository,
+      fakeHashProvider
+    );
+    authenticateUserServer = new AuthenticateUserService(
+      fakeUserRepository,
+      fakeHashProvider
+    );
+  });
   it('should authenticate', async () => {
-    const fakeUserRepository = new FakeUserRepository();
-    const fakeHashProvider = new FakeHashProvider();
-    const createUserServer = new CreateUserServer(
-      fakeUserRepository,
-      fakeHashProvider
-    );
-    const authenticateUserServer = new AuthenticateUserServer(
-      fakeUserRepository,
-      fakeHashProvider
-    );
-
     await createUserServer.execute({
       name: 'Rangel Galo',
       email: 'rangel@galo.com',
@@ -32,13 +38,6 @@ describe('Authenticate User', () => {
   });
 
   it('should not be able to authenticate with non existing user', async () => {
-    const fakeUserRepository = new FakeUserRepository();
-    const fakeHashProvider = new FakeHashProvider();
-    const authenticateUserServer = new AuthenticateUserServer(
-      fakeUserRepository,
-      fakeHashProvider
-    );
-
     expect(
       authenticateUserServer.execute({
         email: 'rangel@galo.com',
@@ -48,17 +47,6 @@ describe('Authenticate User', () => {
   });
 
   it('should not be able to authenticate with an incorrect password', async () => {
-    const fakeUserRepository = new FakeUserRepository();
-    const fakeHashProvider = new FakeHashProvider();
-    const createUserServer = new CreateUserServer(
-      fakeUserRepository,
-      fakeHashProvider
-    );
-    const authenticateUserServer = new AuthenticateUserServer(
-      fakeUserRepository,
-      fakeHashProvider
-    );
-
     await createUserServer.execute({
       name: 'Rangel Galo',
       email: 'rangel@galo.com',
