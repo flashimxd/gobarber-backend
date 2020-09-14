@@ -3,7 +3,6 @@ import IUserRepository from '@modules/user/repositories/IUserRepository';
 import User from '@modules/user/infra/typeorm/entities/Users';
 import ICreateUserDTO from '@modules/user/dtos/ICreateUserDTO';
 import IFindAllProvidersDTO from '@modules/user/dtos/IFindAllProvidersDTO';
-import IFindAllProvidersDTO from '../dtos/IFindAllProvidersDTO';
 
 class UserRepository implements IUserRepository {
   private ormRepository: Repository<User>;
