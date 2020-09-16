@@ -2,7 +2,7 @@ import { injectable, inject } from 'tsyringe';
 import { getDaysInMonth, getDate } from 'date-fns';
 // import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
 // import AppError from '@shared/errors/appErrors';
-import IAppointmentsRepository from '@modules/appointments/repositories/IAppointmentRepository';
+import IAppointmentRepository from '@modules/appointments/repositories/IAppointmentRepository';
 
 interface IRequest {
   provider_id: string;
@@ -18,8 +18,8 @@ type IResponse = Array<{
 @injectable()
 class ListProviderMonthAvailabilityService {
   constructor(
-    @inject('AppointmentsRepository')
-    private appointmentsRepository: IAppointmentsRepository
+    @inject('AppointmentRepository')
+    private appointmentRepository: IAppointmentRepository
   ) {}
 
   public async execute({
@@ -27,7 +27,7 @@ class ListProviderMonthAvailabilityService {
     month,
     year,
   }: IRequest): Promise<IResponse> {
-    const appointments = await this.appointmentsRepository.findAllInMonthFromProvider(
+    const appointments = await this.appointmentRepository.findAllInMonthFromProvider(
       {
         provider_id,
         month,
