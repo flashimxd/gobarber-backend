@@ -3,11 +3,10 @@ import crypto from 'crypto';
 import multer from 'multer';
 
 const tmpFolder = path.resolve(__dirname, '..', '..', 'tmp');
-const uploadsFolder = path.resolve(tmpFolder, 'uploads');
 
 export default {
   tmpFolder,
-  uploadsFolder,
+  uploadsFolder: path.resolve(tmpFolder, 'uploads'),
   storage: multer.diskStorage({
     destination: tmpFolder,
     filename(request, file, callback) {
