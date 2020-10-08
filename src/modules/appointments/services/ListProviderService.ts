@@ -1,6 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 import User from '@modules/user/infra/typeorm/entities/Users';
 import IUserRepository from '@modules/user/repositories/IUserRepository';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
 
 interface Request {
   user_id: string;
@@ -10,15 +11,26 @@ interface Request {
 class ListProviderService {
   constructor(
     @inject('UserRepository')
-    private userRepository: IUserRepository
+    private userRepository: IUserRepository,
+
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider
   ) {}
 
   public async execute({ user_id }: Request): Promise<User[]> {
-    const user = await this.userRepository.findAllProviders({
-      except_user_id: user_id,
-    });
+    let users = await this.cacheProvider.get<User[]>(
+      `providers-list:${user_id}`
+    );
 
-    return user;
+    if (!users) {
+      users = await this.userRepository.findAllProviders({
+        except_user_id: user_id,
+      });
+      console.log('gravou fi');
+      await await this.cacheProvider.save(`providers-list:${user_id}`, users);
+    }
+
+    return users;
   }
 }
 
