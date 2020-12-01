@@ -12,7 +12,7 @@ export default {
   driver: process.env.MAIL_DRIVER || 'ethereal',
   defaults: {
     from: {
-      email: 'contato@rangel.com.br',
+      email: 'rangel@rangel.com.br',
       name: 'Rangel Netto',
     },
   },
