@@ -36,7 +36,6 @@ class ListProviderAppointmentsService {
         day,
       });
 
-      console.log('gravou o cache fi  ');
       await this.cacheProvider.save(cacheKey, appointments);
     }
 
