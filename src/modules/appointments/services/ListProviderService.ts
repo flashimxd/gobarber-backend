@@ -2,6 +2,7 @@ import { inject, injectable } from 'tsyringe';
 import User from '@modules/user/infra/typeorm/entities/Users';
 import IUserRepository from '@modules/user/repositories/IUserRepository';
 import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
+import { classToClass } from 'class-transformer';
 
 interface Request {
   user_id: string;
@@ -27,7 +28,10 @@ class ListProviderService {
         except_user_id: user_id,
       });
 
-      await this.cacheProvider.save(`providers-list:${user_id}`, users);
+      await this.cacheProvider.save(
+        `providers-list:${user_id}`,
+        classToClass(users)
+      );
     }
 
     return users;
